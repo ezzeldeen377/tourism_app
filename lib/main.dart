@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:new_flutter/core/utils/location_permission_handler.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/splash/presentation/splash_view.dart';
@@ -14,7 +15,8 @@ import 'package:new_flutter/features/splash/presentation/widgets/splash_body.dar
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+ await LocationPermissionHandler.checkAndRequestPermission();
+  await LocationPermissionHandler.handleLocationPermission();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
@@ -33,24 +35,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in');
-      }
-    });
-    super.initState();
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: kMainColor),
-      home: const MainPage(),
+      home: const splashview(),
     );
   }
 }

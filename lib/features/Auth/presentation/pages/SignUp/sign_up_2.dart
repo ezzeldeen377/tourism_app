@@ -36,20 +36,20 @@ class SignUp2 extends StatelessWidget {
             child: Column(
               children: [
                 CustomAppBar(
-                  title: "Become a donor",
+                  title: "Complete the data",
                   visibleDescription: true,
                   descriptionTitle: "Fill in your information\nto get started",
                   visibleSteps: true,
                   stepNum: 1,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: const Text(
                       "This data will be displayed in your account\nprofile for security"),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 10),
                 Form(
                     key: _formField,
                     child: Column(
@@ -102,8 +102,10 @@ class SignUp2 extends StatelessWidget {
                         ),
                       ],
                     )),
-                const SizedBox(height: 225),
+                const SizedBox(height: 50),
                 ActionButton(
+                  width: 100,
+                  height: 40,
                   color: Colors.black,
                   text: "Next",
                   onTap: () {

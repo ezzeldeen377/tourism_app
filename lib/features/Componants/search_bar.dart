@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Componants/my_text_form_field.dart';
 
@@ -21,7 +20,7 @@ class MySearchBar extends StatelessWidget {
         keyboardType: TextInputType.text,
         setIcon: true,
         icon: const Icon(
-          IconlyLight.search,
+          Icons.search,
           color:kMainColor,
         ),
       ),

@@ -7,9 +7,9 @@ class ActionButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onTap,
-    this.isBold = false,
+    this.isBold = true,
     this.isGradient = true,
-    this.width = 60,
+    this.width = 20,
     this.height = 40, required Color color,
   }) : super(key: key);
 

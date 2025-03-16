@@ -11,8 +11,6 @@ import 'package:new_flutter/features/on%20Boarding/presentation/widgets/custome_
 
 import '../../../../core/utils/size_config.dart';
 
-
-
 class OnboardingviewBody extends StatefulWidget {
   const OnboardingviewBody({super.key});
   static int pageNum = 0;
@@ -24,12 +22,17 @@ class OnboardingviewBody extends StatefulWidget {
 ///////////////////////
 class _OnboardingviewBodyState extends State<OnboardingviewBody> {
   static PageController pageController = PageController();
-//////////////////////
+
   @override
   void initState() {
     pageController = PageController(initialPage: OnboardingviewBody.pageNum)
       ..addListener(() {
-        setState(() {});
+        setState(() {
+          // Update pageNum when sliding
+          if (pageController.hasClients) {
+            OnboardingviewBody.pageNum = pageController.page?.round() ?? 0;
+          }
+        });
       });
     super.initState();
   }
@@ -41,13 +44,14 @@ class _OnboardingviewBodyState extends State<OnboardingviewBody> {
         Customepageview(
           pageController: pageController,
         ),
-        /////////////////////
         Positioned(
           left: 0,
           right: 0,
           bottom: Sizeconfig.defaultSize! * 20,
           child: CustomeIndicator(
-            dotIndex: pageController.hasClients ? pageController.page : 1,
+            dotIndex: pageController.hasClients
+                ? pageController.page?.toDouble() ?? 0
+                : 0,
           ),
         ),
         Visibility(
@@ -57,11 +61,11 @@ class _OnboardingviewBodyState extends State<OnboardingviewBody> {
             right: 32,
             child: InkWell(
               onTap: () {
-               Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => const Login()),
-            (Route<dynamic> route) => false);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => const Login()),
+                    (Route<dynamic> route) => false);
               },
               child: const Text('Skip',
                   style: TextStyle(
@@ -72,7 +76,6 @@ class _OnboardingviewBodyState extends State<OnboardingviewBody> {
             ),
           ),
         ),
-
         Positioned(
             left: Sizeconfig.defaultSize! * 10,
             right: Sizeconfig.defaultSize! * 10,
@@ -85,14 +88,14 @@ class _OnboardingviewBodyState extends State<OnboardingviewBody> {
                       curve: Curves.easeIn);
                   OnboardingviewBody.pageNum++;
                 } else {
-                  Get.to(() => const LoginView(),
+                  // Replace current screen with LoginView and prevent going back
+                  Get.offAll(() => const LoginView(),
                       transition: Transition.rightToLeft,
                       duration: const Duration(milliseconds: 500));
                 }
               },
               text: OnboardingviewBody.pageNum == 2 ? 'Get started' : 'Next',
               color: kMainColor,
-              onPressed: () {},
             ))
       ],
     );

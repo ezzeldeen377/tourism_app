@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
@@ -27,7 +26,7 @@ class _UpdateinfoPageState extends State<UpdateinfoPage> {
     //To Get Current User
     User user = FirebaseAuth.instance.currentUser!;
     CollectionReference profile =
-        FirebaseFirestore.instance.collection('users');
+        FirebaseFirestore.instance.collection('usersAccounts');
     profile.doc(user.uid).update(
       {
         'userName': nameController.text,
@@ -108,7 +107,7 @@ class _UpdateinfoPageState extends State<UpdateinfoPage> {
                     radius: 60,
                     backgroundColor: Colors.white,
                     child: Icon(
-                      IconlyBold.profile,
+                      Icons.person,
                       size: 75,
                       color: kMainColor,
                     ),
@@ -128,7 +127,7 @@ class _UpdateinfoPageState extends State<UpdateinfoPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        "User Name",
+                        "UserName",
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.35),
                         ),
@@ -142,10 +141,7 @@ class _UpdateinfoPageState extends State<UpdateinfoPage> {
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
-                          suffixIcon: Icon(
-                            Icons.keyboard_arrow_right_rounded,
-                            size: 33,
-                          ),
+                          
                           border: InputBorder.none,
                         ),
                       ),
@@ -183,10 +179,7 @@ class _UpdateinfoPageState extends State<UpdateinfoPage> {
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
-                          suffixIcon: Icon(
-                            Icons.keyboard_arrow_right_rounded,
-                            size: 33,
-                          ),
+                          
                           border: InputBorder.none,
                         ),
                       ),
@@ -224,10 +217,7 @@ class _UpdateinfoPageState extends State<UpdateinfoPage> {
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         decoration: const InputDecoration(
-                          suffixIcon: Icon(
-                            Icons.keyboard_arrow_right_rounded,
-                            size: 33,
-                          ),
+                          
                           border: InputBorder.none,
                         ),
                       ),

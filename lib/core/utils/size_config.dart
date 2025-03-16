@@ -18,3 +18,4 @@ void init(BuildContext context) {
 print('this is the default size $defaultSize');
   }
 }
+const String GOOGLE_MAPS_API_KEY = "AIzaSyBscfN-Reejd7RU7DHcQtycMsN2aZRwHo8";

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+import 'package:new_flutter/features/Screens/Home.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Home/chat.dart';
-import 'package:new_flutter/features/Home/home1.dart';
 import 'package:new_flutter/features/Profile/profile_page.dart';
 
 class IconButtomBar extends StatelessWidget {
@@ -29,7 +28,6 @@ class IconButtomBar extends StatelessWidget {
           icon: selected
               ? Icon(
                   selectedIcon,
-                  //color: const Color(0xffDE0A1E),
                   color: kMainColor,
                   size: 24,
                 )
@@ -64,8 +62,8 @@ class StartApp extends StatefulWidget {
 
 class _StartAppState extends State<StartApp> {
   List<Widget> pages = [
-    const Home1(),
-    const chatbot(),
+    const CategoriesScreen(),
+    const ChatScreen(),
     const ProfilePage(),
   ];
 
@@ -85,8 +83,8 @@ class _StartAppState extends State<StartApp> {
               children: [
                 IconButtomBar(
                     text: "Chat",
-                    icon: IconlyLight.chat,
-                    selectedIcon: IconlyBold.chat,
+                    icon: Icons.chat,
+                    selectedIcon: Icons.chat,
                     selected: StartApp.selectedPage == 1,
                     onPressed: () {
                       setState(() {
@@ -95,8 +93,8 @@ class _StartAppState extends State<StartApp> {
                     }),
                 IconButtomBar(
                   text: "Home",
-                  icon: IconlyLight.home,
-                  selectedIcon: IconlyBold.home,
+                  icon: Icons.home,
+                  selectedIcon: Icons.home,
                   selected: StartApp.selectedPage == 0,
                   onPressed: () {
                     setState(() {
@@ -106,8 +104,8 @@ class _StartAppState extends State<StartApp> {
                 ),
                 IconButtomBar(
                   text: "Profile",
-                  icon: IconlyLight.profile,
-                  selectedIcon: IconlyBold.profile,
+                  icon: Icons.person,
+                  selectedIcon: Icons.person,
                   selected: StartApp.selectedPage == 2,
                   onPressed: () {
                     setState(() {

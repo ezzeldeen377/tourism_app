@@ -12,7 +12,7 @@ class CustomGeneralButton extends StatelessWidget {
       required this.text,
       required this.onTap,
       required Color color,
-      required Null Function() onPressed});
+      });
   final String text;
   final VoidCallback onTap;
 

@@ -1,53 +1,74 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, non_constant_identifier_names
-
-import 'dart:convert';
-import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
-import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
-class chatbot extends StatefulWidget {
-  const chatbot({super.key});
+import 'package:new_flutter/core/widgets/contants.dart';
+
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
 
   @override
-  State<chatbot> createState() => _chatbotState();
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _chatbotState extends State<chatbot> {
-  ChatUser muself = ChatUser(id: "1", firstName: "Mina");
-  ChatUser Bot = ChatUser(id: "2", firstName: "Chat GPT");
-  List<ChatMessage> allMasseges = [];
-  List<ChatUser>typing=[];
+class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _controller = TextEditingController();
+  final List<Map<String, String>> _messages = [];
+  final ScrollController _scrollController = ScrollController();
+  bool isTyping = false;
 
-  final ourUrl ="https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDQF3vh1JSf5gDz8QYRcdySWH9tCbTYmZI";
-  final header={"Content-Type": "application/json"};
-  getData(ChatMessage m) async {
-    typing.add(Bot);
-    allMasseges.insert(0, m);
-    setState(() {});
-      var data={"contents":[{"parts":[{"text":m.text}]}]};
-    await http
-        .post(Uri.parse(ourUrl),headers: header, body: jsonEncode(data))
-        .then((value) {
-      if (value.statusCode==200) {
-        var result=jsonDecode(value.body);
-        print(result["candidates"][0]["content"]["parts"][0]["text"]);
-        ChatMessage m1=ChatMessage(
-          
-          user: Bot,
-         createdAt: DateTime.now(),
-         text: result["candidates"][0]["content"]["parts"][0]["text"]
-         );
-         allMasseges.insert(0, m1);
-         
-      }else{
-        print("Error");
-      }
-    }).catchError((e) {});
-    typing.remove(Bot);
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _sendMessage() async {
+    if (_controller.text.isEmpty) return;
+
+    final message = _controller.text;
+    _controller.clear();
+
     setState(() {
-           
-         });
+      _messages.add({'sender': 'user', 'text': message});
+      isTyping = true; // Set typing to true when sending a message
+    });
+
+    // Simulate typing delay
+    await Future.delayed(const Duration(seconds: 2));
+
+    try {
+      final http.Response response = await http.get(
+        Uri.parse('http://10.0.2.2:5000/get?msg=$message'),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _messages.add({'sender': 'bot', 'text': response.body});
+          isTyping = false; // Set typing to false when response is received
+        });
+      } else {
+        setState(() {
+          _messages.add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
+          isTyping = false; // Set typing to false on error
+        });
+      }
+    } on Exception catch (e) {
+      setState(() {
+        _messages.add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
+        isTyping = false; // Set typing to false on exception
+      });
+    }
+
+    _scrollToBottom();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _messages.add({'sender': 'bot', 'text': "Hi,Welcome to Chatbot,How Can i help You?"});
   }
 
   @override
@@ -57,16 +78,86 @@ class _chatbotState extends State<chatbot> {
         toolbarHeight: 50,
         backgroundColor: kMainColor,
         elevation: 62,
-        title: const Text('Egypt.Chat'),
+        title: const Text('ChatBot'),
       ),
-      body: DashChat(
-        messageOptions:MessageOptions(showTime: true) ,
-        typingUsers:typing,
-          currentUser: muself,
-          onSend: (ChatMessage m) {
-            getData(m);
-          },
-          messages: allMasseges),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: _messages.length + (isTyping ? 1 : 0), // Adjust itemCount for typing indicator
+              itemBuilder: (context, index) {
+                if (index == _messages.length && isTyping) {
+                  // Show typing indicator
+                  return Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(8),
+                      child: const Row(
+                        children: [
+                          Text('•••', style: TextStyle(fontSize: 24)),
+                          SizedBox(width: 8),
+                          Text(
+                            'Chat Bot is typing...',
+                            style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                final message = _messages[index];
+                return Align(
+                  alignment: message['sender'] == 'bot'
+                      ? AlignmentDirectional.centerStart
+                      : AlignmentDirectional.centerEnd,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: message['sender'] == 'user'
+                          ? const Color.fromARGB(255, 255, 187, 0)
+                          : Color.fromARGB(255, 226, 197, 118),
+                    ),
+                    child: Text(
+                      message['text']!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      labelText: 'Send a message',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: _sendMessage,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

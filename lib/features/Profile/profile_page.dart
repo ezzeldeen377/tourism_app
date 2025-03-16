@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:iconly/iconly.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Data/ussr_data/get_data.dart';
 import 'package:new_flutter/features/Home/about.dart';
@@ -18,7 +17,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-    bool isloading = true;
+  bool isloading = true;
 
   getUserData() async {
     CollectionReference backinfo =
@@ -35,17 +34,22 @@ class _ProfilePageState extends State<ProfilePage> {
       lastname = data["lastName"];
       userName = data["userName"];
       email = data["email"];
-          isloading = false;
-          setState(() {});
-
+      isloading = false;
+      setState(() {});
     });
   }
 
-  Future<void> _signOut() async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-    await FirebaseFirestore.instance.clearPersistence();
-  }
+Future<void> _signOut() async {
+  await FirebaseAuth.instance.signOut();
+  await GoogleSignIn().signOut();
+  
+  // Terminate Firestore before clearing persistence
+  await FirebaseFirestore.instance.terminate();
+  await FirebaseFirestore.instance.clearPersistence();
+  
+  // Restart Firestore to ensure it works after clearing
+  await FirebaseFirestore.instance.enableNetwork();
+}
 
   @override
   void initState() {
@@ -55,230 +59,227 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
-
+    return Scaffold(
       backgroundColor: Colors.grey[50],
-      body:
-
-      isloading == true
-              ? const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: CircularProgressIndicator(color: kMainColor),
-                    ),
-                    Text("Loading...."),
-                  ],
-                ):
-       SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
+      body: isloading == true
+          ? const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 70,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Center(
+                  child: CircularProgressIndicator(color: kMainColor),
+                ),
+                Text("Loading...."),
+              ],
+            )
+          : SingleChildScrollView(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
                     children: [
-                      const Text(
-                        'Profile',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(IconlyLight.setting),
-                        iconSize: 28,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SettingScreen()),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 0,
-                  color: Colors.black.withOpacity(0.35),
-                ),
-                const SizedBox(height: 20),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          IconlyBold.profile,
-                          size: 100,
-                          color: kMainColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'First Name',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Text(
-                          userName,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 0,
-                  color: Colors.black.withOpacity(0.35),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'last Name',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Text(
-                          lastname,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 0,
-                  color: Colors.black.withOpacity(0.35),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Gmail',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: Text(
-                          email,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 0,
-                  color: Colors.black.withOpacity(0.35),
-                ),
-                SizedBox(
-                  child: SizedBox(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'About Us',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.push(
+                      SizedBox(
+                        width: double.infinity,
+                        height: 70,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Profile',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.settings),
+                              iconSize: 20,
+                              onPressed: () {
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Aboutus()));
-                            },
-                            icon: const Icon(Icons.info))
-                      ],
-                    ),
-                  ),
-                ),
-                Divider(
-                  height: 0,
-                  color: Colors.black.withOpacity(0.35),
-                ),
-                const SizedBox(height: 15),
-                SizedBox(
-                  width: double.infinity,
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _signOut();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => const Login()),
-                          (Route<dynamic> route) => false);
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Log Out',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                                      builder: (context) =>
+                                          const SettingScreen()),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: CircleAvatar(
+                              radius: 80,
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                                color: kMainColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'First Name',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: Text(
+                                userName,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'last Name',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: Text(
+                                lastname,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Gmail',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: Text(
+                                email,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                      SizedBox(
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'About Us',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Aboutus()));
+                                  },
+                                  icon: const Icon(Icons.info))
+                            ],
                           ),
                         ),
-                        Icon(
-                          IconlyLight.logout,
-                          size: 26,
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _signOut();
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const Login()),
+                                (Route<dynamic> route) => false);
+                          },
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Log Out',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(
+                                Icons.logout,
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

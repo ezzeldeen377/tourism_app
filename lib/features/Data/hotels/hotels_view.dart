@@ -1,19 +1,43 @@
+// ignore_for_file: camel_case_types
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
-import 'package:new_flutter/features/Home/chat.dart';
+import 'package:new_flutter/features/Home/about.dart';
+import 'package:new_flutter/features/maps/testmap.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 import 'package:new_flutter/features/Profile/profile_page.dart';
 
-class Aboutus extends StatelessWidget {
-  const Aboutus({super.key});
+class viewdata extends StatefulWidget {
+  const viewdata({
+    super.key,
+    required this.hotelsName,
+    required this.hotelsDescription,
+    required this.imag,
+    required this.hotelsPrice, required this.lat, required this.lng,
+  });
+  final String hotelsName;
+  final String imag;
+  final String hotelsDescription;
+  final String hotelsPrice;
+  final double lat;
+  final double lng;
+
+  @override
+  State<viewdata> createState() => _FirestoreExampleState();
+}
+
+class _FirestoreExampleState extends State<viewdata> {
   final int _selectedIndex = 0;
 
+  List<QueryDocumentSnapshot> id = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: Drawer(
+        width: 200,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -42,11 +66,11 @@ class Aboutus extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text('Chat Bot'),
+              title: const Text('About us'),
               selected: _selectedIndex == 2,
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const ChatScreen()));
+                    MaterialPageRoute(builder: (context) => const Aboutus()));
               },
             ),
             ListTile(
@@ -78,72 +102,61 @@ class Aboutus extends StatelessWidget {
         iconTheme: const IconThemeData(),
         backgroundColor: Colors.grey[200],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: ListView(
-          children: [
-            Image.asset(
-              "images/image 9.png",
-              fit: BoxFit.cover,
-              width: 300,
-              height: 150,
-            ),
-            Container(
-              child: const Text(
-                "About Us", textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      body: ListView(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: SizedBox(
+              height: 200,
+              width: 100,
+              child: Image.network(
+                widget.imag,
+                fit: BoxFit.cover,
               ),
             ),
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: const Text(
-                "The application helps you explore new places and enjoy various experiences with your friends or family.",
-                style: TextStyle(
-                  fontSize: 14,
-                  
-                  fontWeight: FontWeight.bold,
-                ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(
+              widget.hotelsName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(widget.hotelsDescription,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 10),
+          Center(
+            child: Text(widget.hotelsPrice.toString(),
                 textAlign: TextAlign.center,
-              ),
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: kMainColor)),
+          ),
+          //location
+          Container(
+            padding: const EdgeInsets.all(50),
+            child: ActionButton(
+              width: 50,
+              color: Colors.black,
+              text: "Get Location",
+             onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PlaceDetailPage(placesName : widget.hotelsName,placeLat: widget.lat, placeLng: widget.lng)));
+              },
+              isBold: true,
+              isGradient: true,
             ),
-            Container(
-              child: const Text(
-                "The application displays illustrative pictures of the place you are going to so that you have a background on what the place looks like and all the special details.",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-              child: const Text(
-                "It gives you a unique experience as it provides you with the service of seeing tourist places and knowing their prices before going",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: ActionButton(
-                width: 60,
-                color: Colors.black,
-                text: "Explore",
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const StartApp()));
-                },
-                isBold: true,
-                isGradient: true,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

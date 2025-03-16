@@ -11,13 +11,11 @@ import 'package:new_flutter/features/Componants/underline_text.dart';
 import 'package:new_flutter/features/Screens/Home.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 
-
 class Login extends StatefulWidget {
   const Login({super.key});
 
   static void showSnackBar(BuildContext context, String text,
-      {Color color = kMainColor,
-      behavior = SnackBarBehavior.floating}) {
+      {Color color = kMainColor, behavior = SnackBarBehavior.floating}) {
     final snackBar = SnackBar(
       content: Text(text),
       duration: const Duration(seconds: 3),
@@ -127,10 +125,11 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 20),
                   Stack(
                     children: [
-                    ClipRRect(borderRadius: BorderRadius.circular(60),
-                    child: Image.asset(
-                      fit:BoxFit.cover,
-                      "images/Login.jpeg"),),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(60),
+                        child:
+                            Image.asset(fit: BoxFit.cover, "images/Login.jpeg"),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 25),
@@ -182,8 +181,14 @@ class _LoginState extends State<Login> {
                               });
                             },
                             child: isVisible
-                                ? const Icon(Icons.visibility_off,color: kMainColor,)
-                                : const Icon(Icons.visibility,color: kMainColor,),
+                                ? const Icon(
+                                    Icons.visibility_off,
+                                    color: kMainColor,
+                                  )
+                                : const Icon(
+                                    Icons.visibility,
+                                    color: kMainColor,
+                                  ),
                           ),
                         ),
                       ],
@@ -204,40 +209,36 @@ class _LoginState extends State<Login> {
                           }),
                     ],
                   ),
-                  
                   ActionButton(
                     color: Colors.black,
                     text: "Login",
                     onTap: () {
                       if (formstate.currentState!.validate()) {
                         formstate.currentState!.save();
-                        const Login();
+                        signIn();
                       }
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute (
-                                  builder: (context) => const CategoriesScreen(title: '', imageurl: '',)));
                     },
                     isBold: true,
                     isGradient: false,
-                    width: double.infinity, 
+                    width: double.infinity,
                   ),
                   const SizedBox(height: 15),
                   const Text('Or continue with'),
                   const SizedBox(height: 10),
-                const Padding(
-            padding:EdgeInsets.symmetric(horizontal:0),
-            child: GoogleButton(),
-          ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    child: GoogleButton(),
+                  ),
                   const SizedBox(height: 10),
                   UnderLineText(
                     text: "Don't have an account?",
                     onTap: () {
                       Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignUp1()),
-                            );},
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUp1()),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -247,4 +248,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  }
+}

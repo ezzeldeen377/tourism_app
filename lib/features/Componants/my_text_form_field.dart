@@ -107,8 +107,8 @@ class MapsFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 170,
-      height: 115,
+      //width: 90,
+      //height: 60,
       child: Column(
         children: [
           Container(
@@ -122,7 +122,7 @@ class MapsFormField extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           TextFormField(
             style: const TextStyle(color: Colors.white),
             textAlign: TextAlign.center,

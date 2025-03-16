@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 
@@ -42,7 +41,7 @@ class _CustomDataPickerState extends State<CustomDataPicker> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               width: double.infinity,
               child: const Text(
                 "Birthday Date",
@@ -64,7 +63,7 @@ class _CustomDataPickerState extends State<CustomDataPicker> {
                   children: [
                     const SizedBox(width: 4),
                     const Icon(
-                      IconlyLight.calendar,
+                      Icons.calendar_month,
                       color: kMainColor,
                       size: 25,
                     ),
@@ -77,8 +76,9 @@ class _CustomDataPickerState extends State<CustomDataPicker> {
                     ),
                     const SizedBox(width: 190),
                     const Icon(
-                      IconlyLight.arrow_down_2,
+                      Icons.arrow_downward,
                       color: kMainColor,
+                      size: 30,
                     ),
                   ],
                 )),

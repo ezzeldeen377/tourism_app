@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
 
 // ignore: must_be_immutable
@@ -110,7 +109,7 @@ class HomeAppBar extends StatelessWidget {
                     radius: 28,
                     backgroundColor: Color(0xffDE0A1E),
                     child: Icon(
-                      IconlyBold.profile,
+                      Icons.person,
                       color: Colors.white,
                     )),
               ),
@@ -122,7 +121,7 @@ class HomeAppBar extends StatelessWidget {
                   IconButton(
                     splashRadius: 27,
                     splashColor: const Color(0xffFFB3BF),
-                    icon: const Icon(IconlyLight.calendar),
+                    icon: const Icon(Icons.calendar_month),
                     iconSize: 27,
                     onPressed: () {
                      
@@ -131,7 +130,7 @@ class HomeAppBar extends StatelessWidget {
                   IconButton(
                     splashRadius: 27,
                     splashColor: const Color(0xffFFB3BF),
-                    icon: const Icon(IconlyLight.notification),
+                    icon: const Icon(Icons.notifications),
                     iconSize: 27,
                     onPressed: () {
                      

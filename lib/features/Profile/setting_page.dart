@@ -66,28 +66,7 @@ class SettingScreen extends StatelessWidget {
                   height: 0,
                   color: Colors.black.withOpacity(0.35),
                 ),
-                ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  onTap: () {
-                  
-                  },
-                  title: const Text(
-                    'Notifications',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 20,
-                    color: Colors.black.withOpacity(0.50),
-                  ),
-                ),
-                Divider(
-                  height: 0,
-                  color: Colors.black.withOpacity(0.35),
-                ),
+                
                 ListTile(
                   contentPadding: const EdgeInsets.all(0),
                   onTap: () {

@@ -46,7 +46,7 @@ class GoogleButton extends StatelessWidget {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => const CategoriesScreen(title: '', imageurl: '',)),
+              builder: (BuildContext context) => const CategoriesScreen()),
           (Route<dynamic> route) => false);
 
       // Once signed in, return the UserCredential

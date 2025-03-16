@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/SignUp/sign_up_2.dart';
+import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
 import 'package:new_flutter/features/Componants/my_text_form_field.dart';
 import 'package:new_flutter/features/Componants/underline_text.dart';
@@ -48,7 +48,6 @@ class _SignUp1State extends State<SignUp1> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(60),
                   child: Image.asset(fit: BoxFit.cover, "images/sign_up.jpg"),
@@ -70,7 +69,7 @@ class _SignUp1State extends State<SignUp1> {
                         keyboardType: TextInputType.text,
                         hintText: 'User Name',
                         icon: const Icon(
-                          IconlyBold.profile,
+                          Icons.person,
                           color: kMainColor,
                         ),
                         value: username,
@@ -91,7 +90,7 @@ class _SignUp1State extends State<SignUp1> {
                         keyboardType: TextInputType.emailAddress,
                         hintText: 'Email',
                         icon: const Icon(
-                          IconlyBold.message,
+                          Icons.message,
                           color: kMainColor,
                         ),
                         value: email,
@@ -115,7 +114,7 @@ class _SignUp1State extends State<SignUp1> {
                         keyboardType: TextInputType.text,
                         obscureText: isVisible,
                         icon: const Icon(
-                          IconlyBold.password,
+                          Icons.password,
                           color: kMainColor,
                         ),
                         hintText: 'Password',
@@ -143,7 +142,6 @@ class _SignUp1State extends State<SignUp1> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 13),
 
                 RichText(
                   text: TextSpan(
@@ -174,10 +172,10 @@ class _SignUp1State extends State<SignUp1> {
                   ),
                 ),
 
-                const SizedBox(height: 60),
+                const SizedBox(height: 5),
                 //NextButton
                 ActionButton(
-                  width: 150,
+                  width: 130,
                   color: Colors.black,
                   text: 'Continue',
                   onTap: () {
@@ -196,13 +194,13 @@ class _SignUp1State extends State<SignUp1> {
                   },
                 ),
                 //Return to Login Screen
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
                 UnderLineText(
                     text: 'already have an account?',
                     onTap: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const Home()),
+                        MaterialPageRoute(builder: (context) => const Login()),
                       );
                     }),
               ],

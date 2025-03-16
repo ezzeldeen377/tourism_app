@@ -41,3 +41,29 @@ double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
       cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lng2 - lng1) * p)) / 2;
   return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
 }
+
+  String apiName = "Metro";
+
+String getApiName({required String nameFromList}) {
+  switch (nameFromList) {
+    case 'Metro':
+      apiName = 'subway_station';
+      break;
+      
+      case 'Train':
+      apiName = 'train_station';
+      break;
+
+      case 'Go Bus':
+      apiName = 'bus_station';
+      break;
+
+      case 'Bus':
+      apiName = 'bus_station';
+      break;
+
+    default:
+      apiName = 'Unknown';
+  }
+  return apiName;
+}
