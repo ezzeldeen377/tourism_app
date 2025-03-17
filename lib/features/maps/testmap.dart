@@ -39,20 +39,7 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
 
       // Set fixed coordinates for Cairo, Egypt
       setState(() {
-        currentLocation = Position(
-          latitude: 31.196397932383263,
-          longitude: 29.95741177710627,
-          timestamp: DateTime.now(),
-          accuracy: 0,
-          altitude: 0,
-          heading: 0,
-          speed: 0,
-          speedAccuracy: 0,
-          floor: null,
-          isMocked: false,
-          altitudeAccuracy: 0,
-          headingAccuracy: 0,
-        );
+        currentLocation = location;
       });
       fetchRoute();
 
@@ -95,7 +82,7 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
     if (currentLocation == null) return;
 
     try {
-      String apiKey = 'AIzaSyA_0nbY9TWX-TxtJOyUxTTQFbkz7Ef1uak';
+      String apiKey = 'AIzaSyDfZ9Tane13TmbMuudVbqaV0DJvOxcxmq0';
       final directions = await fetchDirections(
         currentLocation!.latitude,
         currentLocation!.longitude,
@@ -103,7 +90,7 @@ class _PlaceDetailPageState extends State<PlaceDetailPage> {
         widget.placeLng,
         apiKey,
       );
-
+      print("@@@@@@@@@@@@@@@@@$directions");
       if (directions['routes'].isNotEmpty) {
         final points = directions['routes'][0]['overview_polyline']['points'];
         final decodedPoints = decodePolyline(points);

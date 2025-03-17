@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 Future<void> _signOut() async {
   await FirebaseAuth.instance.signOut();
-  await GoogleSignIn().signOut();
+  // await GoogleSignIn().signOut();
   
   // Terminate Firestore before clearing persistence
   await FirebaseFirestore.instance.terminate();

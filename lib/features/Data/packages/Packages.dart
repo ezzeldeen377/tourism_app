@@ -7,6 +7,7 @@ import 'package:new_flutter/features/data/packages/package_view.dart'; // Correc
 import 'package:new_flutter/features/home/about.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 import 'package:new_flutter/features/profile/profile_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Packages extends StatefulWidget {
   const Packages({Key? key});
@@ -150,23 +151,18 @@ class _PackagesState extends State<Packages> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                  "${data[i]['img']}",
+                                child: CachedNetworkImage(
+                                  imageUrl: "${data[i]['img']}",
                                   width: 400,
                                   height: 200,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (BuildContext context,
-                                      Object exception,
-                                      StackTrace? stackTrace) {
-                                    return Container(
-                                      height: 270,
-                                      color: Colors.grey,
-                                      child: const Center(
-                                        child: Icon(Icons.error,
-                                            color: Colors.white),
-                                      ),
-                                    );
-                                  },
+                                  placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.error,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
                               Container(

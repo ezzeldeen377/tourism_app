@@ -6,6 +6,7 @@ import 'package:new_flutter/features/Data/places/places_view.dart';
 import 'package:new_flutter/features/Home/about.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 import 'package:new_flutter/features/Profile/profile_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PlacesData extends StatefulWidget {
   const PlacesData({super.key});
@@ -156,8 +157,19 @@ class _PlacesDataState extends State<PlacesData> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
-                                child: Image.network("${data[i]['img']}",
-                                    width: 400, height: 200, fit: BoxFit.cover),
+                                child: CachedNetworkImage(
+                                  imageUrl: "${data[i]['img']}",
+                                  width: 400,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.error,
+                                    color: Colors.red,
+                                  ),
+                                ),
                               ),
                               Container(
                                   padding: const EdgeInsets.all(10),

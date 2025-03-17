@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:new_flutter/core/utils/location_permission_handler.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
@@ -17,6 +18,8 @@ void main() async {
   await Firebase.initializeApp();
  await LocationPermissionHandler.checkAndRequestPermission();
   await LocationPermissionHandler.handleLocationPermission();
+    Gemini.init(apiKey: "AIzaSyCk6lnyB8-7Nw1QSODDaSKMVpe5_uEiVcI");
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],

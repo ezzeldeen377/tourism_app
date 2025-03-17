@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -40,24 +41,26 @@ class _ChatScreenState extends State<ChatScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     try {
-      final http.Response response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/get?msg=$message'),
-      );
+      final response = await Gemini.instance.prompt(parts: [
+        Part.text(message),
+      ]);
 
-      if (response.statusCode == 200) {
+      if (response?.output!=null) {
         setState(() {
-          _messages.add({'sender': 'bot', 'text': response.body});
+          _messages.add({'sender': 'bot', 'text': response?.output??''});
           isTyping = false; // Set typing to false when response is received
         });
       } else {
         setState(() {
-          _messages.add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
+          _messages
+              .add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
           isTyping = false; // Set typing to false on error
         });
       }
     } on Exception catch (e) {
       setState(() {
-        _messages.add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
+        _messages
+            .add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
         isTyping = false; // Set typing to false on exception
       });
     }
@@ -68,7 +71,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _messages.add({'sender': 'bot', 'text': "Hi,Welcome to Chatbot,How Can i help You?"});
+    _messages.add(
+        {'sender': 'bot', 'text': "Hi,Welcome to Chatbot,How Can i help You?"});
   }
 
   @override
@@ -85,7 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
-              itemCount: _messages.length + (isTyping ? 1 : 0), // Adjust itemCount for typing indicator
+              itemCount: _messages.length +
+                  (isTyping ? 1 : 0), // Adjust itemCount for typing indicator
               itemBuilder: (context, index) {
                 if (index == _messages.length && isTyping) {
                   // Show typing indicator
@@ -100,7 +105,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           SizedBox(width: 8),
                           Text(
                             'Chat Bot is typing...',
-                            style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                            style: TextStyle(
+                                fontSize: 16, fontStyle: FontStyle.italic),
                           ),
                         ],
                       ),
