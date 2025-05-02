@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
+import 'package:new_flutter/core/widgets/custom_drawer.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Data/places/places_view.dart';
 import 'package:new_flutter/features/Home/about.dart';
@@ -39,54 +40,7 @@ class _PlacesDataState extends State<PlacesData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(
-        width: 200,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: kMainColor,
-              ),
-              child: UserAccountsDrawerHeader(
-                  accountName: Text("Name"), accountEmail: Text("Mina helal")),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              selected: _selectedIndex == 0,
-              onTap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const StartApp()),
-                    (Route<dynamic> route) => false);
-              },
-            ),
-            ListTile(
-              title: const Text('ProfilePage'),
-              selected: _selectedIndex == 1,
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ProfilePage()));
-              },
-            ),
-            ListTile(
-              title: const Text('About us'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Aboutus()));
-              },
-            ),
-            ListTile(
-              title: const Text('Log out'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-            ),
-          ],
-        ),
-      ),
+      endDrawer:  CustomDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: const Row(

@@ -29,15 +29,15 @@ class _ProfilePageState extends State<ProfilePage> {
       final data = docs.data() as Map<dynamic, dynamic>;
       //print("///////////////////////////////////////////////////////////////");
       print(data);
-      //print("///////////////////////////////////////////////////////////////");
-      firstname = data["fisrtName"];
+     firstname = data["fisrtName"];
       lastname = data["lastName"];
       userName = data["userName"];
       email = data["email"];
       isloading = false;
       setState(() {});
     });
-  }
+  }    //print("///////////////////////////////////////////////////////////////");
+   
 
 Future<void> _signOut() async {
   await FirebaseAuth.instance.signOut();

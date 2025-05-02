@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/app_data.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
+import 'package:new_flutter/core/widgets/custom_drawer.dart';
 import 'package:new_flutter/core/widgets/models.item.dart';
 import 'package:new_flutter/features/Componants/example_screen_1.dart';
 import 'package:new_flutter/features/Data/transport/transport.dart';
@@ -38,70 +39,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
     
-      endDrawer: Drawer(
-        width: 250, // Increased drawer width for better readability
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: kMainColor,
-              ),
-              child: UserAccountsDrawerHeader(
-                decoration: const BoxDecoration(color: Colors.transparent),
-                accountName: Text(
-                  userName,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                accountEmail: Text(
-                  email,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                currentAccountPicture: const CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 40, color: kMainColor),
-                ),
-              ),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const StartApp()),
-                  (Route<dynamic> route) => false,
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('ProfilePage'),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ProfilePage(),
-                ));
-              },
-            ),
-            ListTile(
-              title: const Text('About us'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Aboutus()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Log out'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const Login()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      endDrawer: CustomDrawer(),
       appBar: AppBar(
         elevation: 2, // Added elevation for better visual hierarchy
         centerTitle: true,

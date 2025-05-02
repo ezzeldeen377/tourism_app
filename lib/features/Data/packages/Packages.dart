@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Corrected import
 
 import 'package:new_flutter/core/widgets/contants.dart';
+import 'package:new_flutter/core/widgets/custom_drawer.dart';
 import 'package:new_flutter/features/auth/presentation/pages/login/widgets/login.dart'; // Corrected import
 import 'package:new_flutter/features/data/packages/package_view.dart'; // Corrected import
 import 'package:new_flutter/features/home/about.dart';
@@ -39,56 +40,7 @@ class _PackagesState extends State<Packages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(
-        width: 200,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: kMainColor,
-              ),
-              child: UserAccountsDrawerHeader(
-                accountName: Text("Name"),
-                accountEmail: Text("Mina helal"),
-              ),
-            ),
-            ListTile(
-              title: const Text('Home'),
-              selected: _selectedIndex == 0,
-              onTap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const StartApp()),
-                    (Route<dynamic> route) => false);
-              },
-            ),
-            ListTile(
-              title: const Text('ProfilePage'),
-              selected: _selectedIndex == 1,
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ProfilePage()));
-              },
-            ),
-            ListTile(
-              title: const Text('About us'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Aboutus()));
-              },
-            ),
-            ListTile(
-              title: const Text('Log out'),
-              selected: _selectedIndex == 3,
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-            ),
-          ],
-        ),
-      ),
+      endDrawer: CustomDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: const Row(
@@ -152,14 +104,16 @@ class _PackagesState extends State<Packages> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
                                 child: CachedNetworkImage(
-                                  imageUrl: (data[i]['images'] as List<dynamic>)[0],
+                                  imageUrl:
+                                      (data[i]['images'] as List<dynamic>)[0],
                                   width: 400,
                                   height: 200,
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => const Center(
                                     child: CircularProgressIndicator(),
                                   ),
-                                  errorWidget: (context, url, error) => const Icon(
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(
                                     Icons.error,
                                     color: Colors.red,
                                   ),

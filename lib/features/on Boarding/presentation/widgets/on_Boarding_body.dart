@@ -8,6 +8,8 @@ import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login_view.dart';
 import 'package:new_flutter/features/on%20Boarding/presentation/widgets/custome_indicator.dart';
 import 'package:new_flutter/features/on%20Boarding/presentation/widgets/custome_page_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:new_flutter/start_app/start_page.dart';
 
 import '../../../../core/utils/size_config.dart';
 
@@ -19,85 +21,116 @@ class OnboardingviewBody extends StatefulWidget {
   _OnboardingviewBodyState createState() => _OnboardingviewBodyState();
 }
 
-///////////////////////
 class _OnboardingviewBodyState extends State<OnboardingviewBody> {
   static PageController pageController = PageController();
 
   @override
   void initState() {
+    super.initState();
     pageController = PageController(initialPage: OnboardingviewBody.pageNum)
       ..addListener(() {
         setState(() {
-          // Update pageNum when sliding
           if (pageController.hasClients) {
             OnboardingviewBody.pageNum = pageController.page?.round() ?? 0;
           }
         });
       });
-    super.initState();
+
+    // Check login state in initState
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // User is logged in, navigate to StartApp
+      Future.microtask(() {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const StartApp()),
+          (route) => false,
+        );
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Customepageview(
-          pageController: pageController,
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: Sizeconfig.defaultSize! * 20,
-          child: CustomeIndicator(
-            dotIndex: pageController.hasClients
-                ? pageController.page?.toDouble() ?? 0
-                : 0,
-          ),
-        ),
-        Visibility(
-          visible: OnboardingviewBody.pageNum == 2 ? false : true,
-          child: Positioned(
-            top: Sizeconfig.defaultSize! * 10,
-            right: 32,
-            child: InkWell(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => const Login()),
-                    (Route<dynamic> route) => false);
-              },
-              child: const Text('Skip',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: kMainColor1),
-                  textAlign: TextAlign.left),
-            ),
-          ),
-        ),
-        Positioned(
-            left: Sizeconfig.defaultSize! * 10,
-            right: Sizeconfig.defaultSize! * 10,
-            bottom: Sizeconfig.defaultSize! * 10,
-            child: CustomGeneralButton(
-              onTap: () {
-                if (OnboardingviewBody.pageNum < 2) {
-                  pageController.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeIn);
-                  OnboardingviewBody.pageNum++;
-                } else {
-                  // Replace current screen with LoginView and prevent going back
-                  Get.offAll(() => const LoginView(),
-                      transition: Transition.rightToLeft,
-                      duration: const Duration(milliseconds: 500));
-                }
-              },
-              text: OnboardingviewBody.pageNum == 2 ? 'Get started' : 'Next',
-              color: kMainColor,
-            ))
-      ],
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          if (snapshot.hasData) {
+            // User is logged in, go to StartApp
+            Future.microtask(() {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const StartApp()),
+                (route) => false,
+              );
+            });
+            return const SizedBox.shrink();
+          } else {
+            // User is not logged in, show onboarding
+            return Stack(
+              children: [
+                Customepageview(
+                  pageController: pageController,
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: Sizeconfig.defaultSize! * 20,
+                  child: CustomeIndicator(
+                    dotIndex: pageController.hasClients
+                        ? pageController.page?.toDouble() ?? 0
+                        : 0,
+                  ),
+                ),
+                Visibility(
+                  visible: OnboardingviewBody.pageNum == 2 ? false : true,
+                  child: Positioned(
+                    top: Sizeconfig.defaultSize! * 10,
+                    right: 32,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => const Login()),
+                            (Route<dynamic> route) => false);
+                      },
+                      child: const Text('Skip',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: kMainColor1),
+                          textAlign: TextAlign.left),
+                    ),
+                  ),
+                ),
+                Positioned(
+                    left: Sizeconfig.defaultSize! * 10,
+                    right: Sizeconfig.defaultSize! * 10,
+                    bottom: Sizeconfig.defaultSize! * 10,
+                    child: CustomGeneralButton(
+                      onTap: () {
+                        if (OnboardingviewBody.pageNum < 2) {
+                          pageController.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeIn);
+                          OnboardingviewBody.pageNum++;
+                        } else {
+                          // Replace current screen with LoginView and prevent going back
+                          Get.offAll(() => const LoginView(),
+                              transition: Transition.rightToLeft,
+                              duration: const Duration(milliseconds: 500));
+                        }
+                      },
+                      text: OnboardingviewBody.pageNum == 2 ? 'Get started' : 'Next',
+                      color: kMainColor,
+                    ))
+              ],
+            );
+          }
+        }
+        // Show loading indicator while waiting for auth state
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 }

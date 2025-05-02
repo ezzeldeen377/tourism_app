@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
+import 'package:new_flutter/core/widgets/custom_drawer.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
 import 'package:new_flutter/features/Componants/example_screen_1.dart';
@@ -20,7 +21,8 @@ class viewplaces extends StatefulWidget {
     required this.images,
     required this.placesPrice,
     required this.lat,
-    required this.lng, this.fullImage,
+    required this.lng,
+    this.fullImage,
   });
   final String placesName;
   final List<dynamic> images;
@@ -41,55 +43,7 @@ class _viewplacesState extends State<viewplaces> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(
-        backgroundColor: Colors.white,
-        width: 250,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [kMainColor, kMainColor.withOpacity(0.7)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 35, color: kMainColor),
-                  ),
-                  SizedBox(height: 10),
-                  Text("Mina helal",
-                      style: TextStyle(color: Colors.white, fontSize: 18)),
-                ],
-              ),
-            ),
-            _buildDrawerItem(Icons.home, 'Home', 0, () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const StartApp()),
-                  (Route<dynamic> route) => false);
-            }),
-            _buildDrawerItem(Icons.person, 'Profile', 1, () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const ProfilePage()));
-            }),
-            _buildDrawerItem(Icons.info, 'About us', 2, () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const Aboutus()));
-            }),
-            _buildDrawerItem(Icons.logout, 'Log out', 3, () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const Login()));
-            }),
-          ],
-        ),
-      ),
+      endDrawer: CustomDrawer(),
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
@@ -131,7 +85,8 @@ class _viewplacesState extends State<viewplaces> {
                 ),
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: kMainColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -204,14 +159,17 @@ class _viewplacesState extends State<viewplaces> {
     );
   }
 
-  Widget _buildDrawerItem(IconData icon, String title, int index, VoidCallback onTap) {
+  Widget _buildDrawerItem(
+      IconData icon, String title, int index, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: _selectedIndex == index ? kMainColor : Colors.grey),
+      leading:
+          Icon(icon, color: _selectedIndex == index ? kMainColor : Colors.grey),
       title: Text(
         title,
         style: TextStyle(
           color: _selectedIndex == index ? kMainColor : Colors.black87,
-          fontWeight: _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
+          fontWeight:
+              _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
         ),
       ),
       selected: _selectedIndex == index,

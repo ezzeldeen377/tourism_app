@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:new_flutter/features/on%20Boarding/presentation/widgets/page_view_item.dart';
 
 class Customepageview extends StatelessWidget {
-  const Customepageview({super.key,@required this.pageController,});
-  final PageController? pageController;
-   @override
+  final PageController pageController;
+  const Customepageview({super.key, required this.pageController});
+
+  @override
   Widget build(BuildContext context) {
-    return  PageView(
+    return PageView(
       controller: pageController,
          children: const [ 
           PageViewItems (
