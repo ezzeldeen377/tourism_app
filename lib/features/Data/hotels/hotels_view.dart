@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
+import 'package:new_flutter/features/Componants/image_stack.dart';
 import 'package:new_flutter/features/Home/about.dart';
 import 'package:new_flutter/features/maps/testmap.dart';
 import 'package:new_flutter/start_app/start_page.dart';
@@ -19,7 +20,7 @@ class viewdata extends StatefulWidget {
     required this.hotelsPrice, required this.lat, required this.lng,
   });
   final String hotelsName;
-  final String imag;
+  final List<dynamic> imag;
   final String hotelsDescription;
   final String hotelsPrice;
   final double lat;
@@ -104,17 +105,7 @@ class _FirestoreExampleState extends State<viewdata> {
       ),
       body: ListView(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: SizedBox(
-              height: 200,
-              width: 100,
-              child: Image.network(
-                widget.imag,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+        ImageStack(imgList: widget.imag),
           Container(
             padding: const EdgeInsets.only(top: 5),
             child: Text(

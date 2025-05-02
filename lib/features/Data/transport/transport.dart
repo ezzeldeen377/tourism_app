@@ -6,6 +6,7 @@ import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Data/transport/tansport_view.dart';
 import 'package:new_flutter/features/Home/about.dart';
+import 'package:new_flutter/features/Screens/file.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 import 'package:new_flutter/features/Profile/profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -143,8 +144,15 @@ class _TransportState extends State<Transport> {
                               builder: (context) => viewTransport(
                                     Title: data[B]['Title'],
                                     subtitle: data[B]['subtitle'],
-                                    img: data[B]['img'],
+                                    img: data[B]['images'] as List<dynamic>,
                                     price: data[B]['price'],
+                                    stations: (data[B]['station'] as List<dynamic>)
+                                        .map((station) => Station(
+                                              station_name: station['station_name'],
+                                              latitude: station['latitude'],
+                                              longtitude: station['longtitude'],
+                                            ))
+                                        .toList(),
                                   )));
                         },
                         child: Padding(
@@ -154,7 +162,7 @@ class _TransportState extends State<Transport> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
                                 child: CachedNetworkImage(
-                                  imageUrl: "${data[B]['img']}",
+                                  imageUrl: (data[B]['images']as List<dynamic>).first,
                                   width: 400,
                                   height: 200,
                                   fit: BoxFit.cover,

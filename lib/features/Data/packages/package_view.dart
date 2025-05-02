@@ -31,7 +31,7 @@ class _packageviewState extends State<packageview> {
         await FirebaseFirestore.instance.collection("places").get().then(
       (value) {
         for (var element in value.docs) {
-          if (element['package_id'].toString() == widget.id) {
+          if (element['package_id'].toString() == '1') {
             finaldata.add(element);
           }
         }
@@ -178,11 +178,12 @@ class _packageviewState extends State<packageview> {
                                               ['places_name'],
                                           placesDescription: finaldata[i]
                                               ['places_description'],
-                                          imag: finaldata[i]['img'],
+                                          images: finaldata[i]['images'] as List<dynamic>,
                                           placesPrice: finaldata[i]
                                               ['places_price'],
                                           lat: finaldata[i]['latitude'],
-                                          lng: finaldata[i]['longitude'],
+                                          lng: finaldata[i]['longtitude'],
+                                  fullImage:data[i]["visual_360"]
                                         );
                                       }
                                     }));
@@ -195,7 +196,7 @@ class _packageviewState extends State<packageview> {
                                           borderRadius:
                                               BorderRadius.circular(30),
                                           child: Image.network(
-                                            "${finaldata[i]['img']}",
+                                            (finaldata[i]['images'] as List<dynamic>).first,
                                             width: 400,
                                             height: 200,
                                             fit: BoxFit.cover,

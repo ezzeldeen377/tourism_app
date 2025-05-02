@@ -1,9 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/app_data.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/core/widgets/models.item.dart';
+import 'package:new_flutter/features/Componants/example_screen_1.dart';
 import 'package:new_flutter/features/Data/transport/transport.dart';
+import 'package:new_flutter/features/Screens/file.dart';
 import 'package:new_flutter/features/data/hotels/hotels_data.dart';
 import 'package:new_flutter/features/data/packages/packages.dart';
 import 'package:new_flutter/features/data/places/places_data.dart';
@@ -34,6 +37,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    
       endDrawer: Drawer(
         width: 250, // Increased drawer width for better readability
         child: ListView(

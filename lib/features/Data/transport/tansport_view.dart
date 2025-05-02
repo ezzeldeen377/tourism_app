@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
+import 'package:new_flutter/features/Componants/image_stack.dart';
 import 'package:new_flutter/features/Home/about.dart';
+import 'package:new_flutter/features/Screens/file.dart';
 import 'package:new_flutter/features/maps/map.dart';
 import 'package:new_flutter/features/maps/maps_function.dart';
 import 'package:new_flutter/start_app/start_page.dart';
@@ -17,11 +19,12 @@ class viewTransport extends StatefulWidget {
     required this.Title,
     required this.subtitle,
     required this.img,
-    required this.price
+    required this.price, required this.stations
 
   });
   final String Title;
-  final String img;
+  final List<dynamic> img;
+  final List<Station> stations;
   final String subtitle;
   final String price;
 
@@ -116,17 +119,7 @@ class _viewTransportState extends State<viewTransport> {
       body: ListView(
         children: [
           const SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: SizedBox(
-              height: 200,
-              width: 100,
-              child: Image.network(
-                widget.img,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+      ImageStack(imgList: widget.img),
           Container(
             padding: const EdgeInsets.only(top: 10),
             child: Text(
@@ -163,7 +156,7 @@ class _viewTransportState extends State<viewTransport> {
                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>  TransportationMap(transport:apiName)));
+                        builder: (context) =>  TransportationMap(stations:widget.stations)));
               
               },
               isBold: true,

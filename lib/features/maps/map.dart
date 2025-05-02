@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:new_flutter/features/Screens/file.dart';
 
 class TransportationMap extends StatefulWidget {
-  const TransportationMap({Key? key, required this.transport}) : super(key: key);
+  const TransportationMap({Key? key, required this.stations}) : super(key: key);
 
-  final String transport;
+  final List<Station> stations;
 
   @override
   _TransportationMapState createState() => _TransportationMapState();
@@ -41,39 +42,28 @@ class _TransportationMapState extends State<TransportationMap> {
     // Fetch all metro stations from the Google Places API
     if (userLocation == null) return;
 
-    String apiKey = 'AIzaSyA_0nbY9TWX-TxtJOyUxTTQFbkz7Ef1uak';
-    String endpoint =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${userLocation!.latitude},${userLocation!.longitude}&radius=50000&type=${widget.transport}&key=$apiKey';
+   
 
-    final response = await http.get(Uri.parse(endpoint));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      List<dynamic>? results = data['results'];
-
-      if (results != null && results.isNotEmpty) {
-        setState(() {
-          allMarkers = results!.map((result) {
-            Map<String, dynamic> location = result['geometry']['location'];
-            LatLng latLng = LatLng(location['lat'], location['lng']);
-            return Marker(
-              markerId: MarkerId(latLng.toString()),
-              position: latLng,
-              infoWindow: InfoWindow(title: result['name']),
-              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-            );
-          }).toList();
-
-          // Find nearest station
-          nearestStation = findNearestStation();
-        });
-      } else {
-        throw Exception('No stations found');
+        if (widget.stations.isNotEmpty) {
+          setState(() {
+            allMarkers = widget.stations.map((station) {
+              return Marker(
+                markerId: MarkerId(station.station_name),
+                position: LatLng(station.latitude, station.longtitude),
+                infoWindow: InfoWindow(title: station.station_name),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+              );
+            }).toList();
+            nearestStation = findNearestStation();
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No stations found in this area')),
+          );
+        }
       }
-    } else {
-      throw Exception('Failed to fetch stations');
-    }
-  }
+    
+  
 
   LatLng? findNearestStation() {
     // Find the nearest metro station to the user's location
@@ -98,30 +88,15 @@ class _TransportationMapState extends State<TransportationMap> {
     return nearestStation;
   }
 
-  Future<void> fetchDirections(LatLng destination) async {
-    // Fetch directions from the user's location to the nearest metro station
-    String apiKey = 'AIzaSyA_0nbY9TWX-TxtJOyUxTTQFbkz7Ef1uak';
-    String endpoint =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${userLocation!.latitude},${userLocation!.longitude}&destination=${destination.latitude},${destination.longitude}&key=$apiKey';
+    Future<void> fetchDirections(LatLng destination) async {
+    if (userLocation == null) return;
 
-    final response = await http.get(Uri.parse(endpoint));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      List<dynamic>? routes = data['routes'];
-
-      if (routes != null && routes.isNotEmpty) {
-        setState(() {
-          // Decode polyline points
-          String points = routes![0]['overview_polyline']['points'];
-          polylineCoordinates = _decodePoly(points);
-        });
-      } else {
-        throw Exception('No routes found');
-      }
-    } else {
-      throw Exception('Failed to fetch directions');
-    }
+    setState(() {
+      polylineCoordinates = [
+        userLocation!,
+        destination,
+      ];
+    });
   }
 
   List<LatLng> _decodePoly(String encoded) {
@@ -167,7 +142,7 @@ class _TransportationMapState extends State<TransportationMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${widget.transport} map')),
+      appBar: AppBar(title: Text(' map')),
       body: userLocation == null
           ? const Center(child: CircularProgressIndicator())
           : GoogleMap(

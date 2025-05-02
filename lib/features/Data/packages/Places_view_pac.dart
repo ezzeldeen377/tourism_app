@@ -145,7 +145,7 @@ class _packageview1State extends State<packageview1> {
                                     placesName: finaldata[i]['hotel_name'],
                                     placesDescription: finaldata[i]
                                         ['hotel_description'],
-                                    imag: finaldata[i]['img'],
+                                    images: finaldata[i]['images'] as List<dynamic>,
                                     lat: finaldata[i]['latitude'],
                                     lng: finaldata[i]['longitude'],
                                     placesPrice: finaldata[i]['hotel_price']);
@@ -159,7 +159,7 @@ class _packageview1State extends State<packageview1> {
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(30),
                                   child: Image.network(
-                                    "${finaldata[i]['img']}",
+                                    (finaldata[i]['images']as List<dynamic>).first,
                                     width: 400,
                                     height: 200,
                                     fit: BoxFit.cover,

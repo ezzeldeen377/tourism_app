@@ -144,10 +144,12 @@ class _PlacesDataState extends State<PlacesData> {
                                   placesName: data[i]['places_name'],
                                   placesDescription: data[i]
                                       ['places_description'],
-                                  imag: data[i]['img'],
+                                  images: data[i]['images'] as List<dynamic>,
                                   lat: data[i]['latitude'],
-                                  lng: data[i]['longitude'],
-                                  placesPrice: data[i]['places_price']);
+                                  lng: data[i]['longtitude'],
+                                  placesPrice: data[i]['places_price'],
+                                  fullImage:data[i]["visual_360"]
+                                  );
                             }
                           }));
                         },
@@ -155,10 +157,11 @@ class _PlacesDataState extends State<PlacesData> {
                           padding: const EdgeInsets.all(5.0),
                           child: Stack(
                             children: [
+
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
                                 child: CachedNetworkImage(
-                                  imageUrl: "${data[i]['img']}",
+                                  imageUrl: (data[i]['images'] as List<dynamic>).first,
                                   width: 400,
                                   height: 200,
                                   fit: BoxFit.cover,

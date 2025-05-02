@@ -11,28 +11,38 @@ import 'package:new_flutter/core/utils/location_permission_handler.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/splash/presentation/splash_view.dart';
+import 'package:new_flutter/firebase_options.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 import 'package:new_flutter/features/splash/presentation/widgets/splash_body.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await LocationPermissionHandler.checkAndRequestPermission();
   await LocationPermissionHandler.handleLocationPermission();
+  await _initializeNotifications();  // Make sure to await initialization
   Gemini.init(apiKey: "AIzaSyCk6lnyB8-7Nw1QSODDaSKMVpe5_uEiVcI");
 
-
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-
   OneSignal.initialize("860b853c-cb34-4685-b6b7-9dccd85c5fd7");
-
-// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.Notifications.requestPermission(true);
-OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+  
+  OneSignal.Notifications.addForegroundWillDisplayListener((event) {
     event.preventDefault(); // Prevent OneSignal's default handling
-    OneSignal.Notifications.displayNotification(event.notification.notificationId); // Manually show notification
+    
+    // Use local notification instead
+    showLocalNotification(
+      title: event.notification.title ?? 'New Notification',
+      body: event.notification.body ?? '',
+    );
   });
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
@@ -42,6 +52,7 @@ OneSignal.Notifications.addForegroundWillDisplayListener((event) {
   );
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -65,17 +76,58 @@ class MainPage extends StatelessWidget {
   const MainPage({super.key});
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
-      body: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (_, snapshot) {
-            if (!snapshot.hasData) {
-              //if user isn't signed in
-              return const Login();
-            }
-            //if user is signed in
-            return const StartApp();
-          }),
+      body: user == null ? const Login() : const StartApp(),
     );
   }
+}
+
+Future<void> showLocalNotification({
+  required String title,
+  required String body,
+}) async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'tourism_app_channel',
+    'Tourism App Notifications',
+    importance: Importance.max,
+    priority: Priority.high,
+    showWhen: true,
+  );
+  const DarwinNotificationDetails iOSPlatformChannelSpecifics =
+      DarwinNotificationDetails();
+  const NotificationDetails platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics,
+  );
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    title,
+    body,
+    platformChannelSpecifics,
+  );
+}
+
+Future<void> _initializeNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse details) async {
+      // Handle notification tap
+      print('Notification clicked: ${details.payload}');
+    },
+  );
 }

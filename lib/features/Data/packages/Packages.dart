@@ -141,7 +141,7 @@ class _PackagesState extends State<Packages> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => packageview(
-                              id: data[i]['package_id'],
+                              id: data[i]['id'],
                             ),
                           ));
                         },
@@ -152,7 +152,7 @@ class _PackagesState extends State<Packages> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
                                 child: CachedNetworkImage(
-                                  imageUrl: "${data[i]['img']}",
+                                  imageUrl: (data[i]['images'] as List<dynamic>)[0],
                                   width: 400,
                                   height: 200,
                                   fit: BoxFit.cover,

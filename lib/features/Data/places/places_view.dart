@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:new_flutter/core/widgets/contants.dart';
 import 'package:new_flutter/features/Auth/presentation/pages/login/widgets/login.dart';
 import 'package:new_flutter/features/Componants/buttons.dart';
+import 'package:new_flutter/features/Componants/example_screen_1.dart';
+import 'package:new_flutter/features/Componants/image_stack.dart';
 import 'package:new_flutter/features/Home/about.dart';
 import 'package:new_flutter/features/maps/testmap.dart';
 import 'package:new_flutter/start_app/start_page.dart';
@@ -15,17 +17,18 @@ class viewplaces extends StatefulWidget {
     super.key,
     required this.placesName,
     required this.placesDescription,
-    required this.imag,
+    required this.images,
     required this.placesPrice,
     required this.lat,
-    required this.lng,
+    required this.lng, this.fullImage,
   });
   final String placesName;
-  final String imag;
+  final List<dynamic> images;
   final double lat;
   final double lng;
   final String placesDescription;
   final String placesPrice;
+  final String? fullImage;
 
   @override
   State<viewplaces> createState() => _viewplacesState();
@@ -33,139 +36,186 @@ class viewplaces extends StatefulWidget {
 
 class _viewplacesState extends State<viewplaces> {
   final int _selectedIndex = 0;
-
   List<QueryDocumentSnapshot> id = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: Drawer(
-        width: 200,
+        backgroundColor: Colors.white,
+        width: 250,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
-                color: kMainColor,
+                gradient: LinearGradient(
+                  colors: [kMainColor, kMainColor.withOpacity(0.7)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-              child: UserAccountsDrawerHeader(
-                  accountName: Text("Name"), accountEmail: Text("Mina helal")),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.person, size: 35, color: kMainColor),
+                  ),
+                  SizedBox(height: 10),
+                  Text("Mina helal",
+                      style: TextStyle(color: Colors.white, fontSize: 18)),
+                ],
+              ),
             ),
-            ListTile(
-              title: const Text('Home'),
-              selected: _selectedIndex == 0,
-              onTap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const StartApp()),
-                    (Route<dynamic> route) => false);
-              },
-            ),
-            ListTile(
-              title: const Text('ProfilePage'),
-              selected: _selectedIndex == 1,
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ProfilePage()));
-              },
-            ),
-            ListTile(
-              title: const Text('About us'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Aboutus()));
-              },
-            ),
-            ListTile(
-              title: const Text('Log out'),
-              selected: _selectedIndex == 2,
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-            ),
+            _buildDrawerItem(Icons.home, 'Home', 0, () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const StartApp()),
+                  (Route<dynamic> route) => false);
+            }),
+            _buildDrawerItem(Icons.person, 'Profile', 1, () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const ProfilePage()));
+            }),
+            _buildDrawerItem(Icons.info, 'About us', 2, () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const Aboutus()));
+            }),
+            _buildDrawerItem(Icons.logout, 'Log out', 3, () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const Login()));
+            }),
           ],
         ),
       ),
       appBar: AppBar(
+        elevation: 0,
         centerTitle: true,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.explore,
-              color: kMainColor,
-            ),
+            Icon(Icons.explore, color: kMainColor, size: 28),
+            SizedBox(width: 8),
             Text(
               "Egypt.io",
-              style: TextStyle(color: kMainColor1),
-            ),
-          ],
-        ),
-        iconTheme: const IconThemeData(),
-        backgroundColor: Colors.grey[200],
-      ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 15),
-          SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.network(
-                widget.imag,
-                  width: 400,
-                  height: 200, 
-                  fit: BoxFit.cover
-                  ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 10),
-            child: Text(
-              widget.placesName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
+              style: TextStyle(
+                color: kMainColor1,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          const SizedBox(height: 15),
-          Text(widget.placesDescription,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 15),
-          Center(
-            child: Text(widget.placesPrice.toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: kMainColor)),
-          ),
-          //location
+          ],
+        ),
+        backgroundColor: Colors.white,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          const SizedBox(height: 20),
+          ImageStack(imgList: widget.images),
+          const SizedBox(height: 24),
           Container(
-            padding: const EdgeInsets.all(50),
-            child: ActionButton(
-              width: 20,
-              color: Colors.black,
-              text: "Get Location",
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.placesName,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: kMainColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    "${widget.placesPrice} EGP",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: kMainColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  widget.placesDescription,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ActionButton(
+                  width: double.infinity,
+                  color: kMainColor,
+                  text: "Get Location",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
                         builder: (context) => PlaceDetailPage(
-                            placesName: widget.placesName,
-                            placeLat: widget.lat,
-                            placeLng: widget.lng)));
-              },
-              isBold: true,
-              isGradient: true,
+                          placesName: widget.placesName,
+                          placeLat: widget.lat,
+                          placeLng: widget.lng,
+                        ),
+                      ),
+                    );
+                  },
+                  isBold: true,
+                  isGradient: true,
+                ),
+                if (widget.fullImage != null) ...[
+                  const SizedBox(height: 16),
+                  ActionButton(
+                    width: double.infinity,
+                    color: kMainColor.withOpacity(0.9),
+                    text: "View Full Image",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FullView(
+                            title: widget.placesName,
+                            url: widget.fullImage ?? "",
+                          ),
+                        ),
+                      );
+                    },
+                    isBold: true,
+                    isGradient: true,
+                  ),
+                ],
+                const SizedBox(height: 24),
+              ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDrawerItem(IconData icon, String title, int index, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: _selectedIndex == index ? kMainColor : Colors.grey),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: _selectedIndex == index ? kMainColor : Colors.black87,
+          fontWeight: _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      selected: _selectedIndex == index,
+      onTap: onTap,
     );
   }
 }

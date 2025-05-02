@@ -147,7 +147,7 @@ class _HotelsDataState extends State<HotelsData> {
                                   hotelsName: data[v]['hotel_name'],
                                   hotelsDescription: data[v]
                                       ['hotel_description'],
-                                  imag: data[v]['img'],
+                                  imag: data[v]['images']as List<dynamic>,
                                    lat:  data[v]['latitude'],
                                     lng:  data[v]['longitude'],
                                   hotelsPrice: data[v]['hotel_price'])));
@@ -159,7 +159,7 @@ class _HotelsDataState extends State<HotelsData> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(30),
                                 child: CachedNetworkImage(
-                                  imageUrl: "${data[v]['img']}",
+                                  imageUrl: (data[v]['images'] as List<dynamic>).first,
                                   width: 400,
                                   height: 200,
                                   fit: BoxFit.cover,
