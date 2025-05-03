@@ -51,22 +51,7 @@ class _OnboardingviewBodyState extends State<OnboardingviewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
-          if (snapshot.hasData) {
-            // User is logged in, go to StartApp
-            Future.microtask(() {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const StartApp()),
-                (route) => false,
-              );
-            });
-            return const SizedBox.shrink();
-          } else {
-            // User is not logged in, show onboarding
-            return Stack(
+    return Stack(
               children: [
                 Customepageview(
                   pageController: pageController,
@@ -128,9 +113,5 @@ class _OnboardingviewBodyState extends State<OnboardingviewBody> {
             );
           }
         }
-        // Show loading indicator while waiting for auth state
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-}
+  
+  
