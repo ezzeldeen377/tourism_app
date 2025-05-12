@@ -1,0 +1,2 @@
+D:/project flutter/tour guide/tourism_app-main/android/app/.cxx/Debug/2x492m2c/x86/CMakeFiles/edit_cache.dir
+D:/project flutter/tour guide/tourism_app-main/android/app/.cxx/Debug/2x492m2c/x86/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+D:\project flutter\tour guide\tourism_app-main\build\app\intermediates\cxx\Debug\2x492m2c\obj\arm64-v8a
