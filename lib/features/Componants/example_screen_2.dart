@@ -224,30 +224,7 @@ Page resource error:
         backgroundColor: Colors.transparent,
         title: Text(widget.title),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 100,),
-          //Text(title),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: WebViewWidget(controller: _controller),
-              ),
-            ],
-          ),
-          GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Container(
-              child: Text("Back"),
-            ),
-          ),
-        ],
-      ),      
+      body: WebViewWidget(controller: _controller),      
     );
   }
 
