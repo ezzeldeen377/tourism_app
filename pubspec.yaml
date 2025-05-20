@@ -56,7 +56,8 @@
     flutter_svg: ^2.1.0
     http: ^1.4.0
     image_picker: ^1.1.2
-
+    tflite_flutter: ^0.11.0  # Downgrade to a version compatible with tflite_flutter_helper
+    image: ^4.2.0
   dependency_overrides:
     win32: ^5.5.4
   dev_dependencies:
@@ -81,6 +82,8 @@
     uses-material-design: true
     # To add assets to your application, add an assets section, like this:
     assets:
+      - assets/model_unquant.tflite
+      - assets/labels.txt
       - assets/
       - images/
 

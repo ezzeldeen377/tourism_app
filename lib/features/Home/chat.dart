@@ -45,9 +45,9 @@ class _ChatScreenState extends State<ChatScreen> {
         Part.text(message),
       ]);
 
-      if (response?.output!=null) {
+      if (response?.output != null) {
         setState(() {
-          _messages.add({'sender': 'bot', 'text': response?.output??''});
+          _messages.add({'sender': 'bot', 'text': response?.output ?? ''});
           isTyping = false; // Set typing to false when response is received
         });
       } else {
@@ -64,6 +64,26 @@ class _ChatScreenState extends State<ChatScreen> {
         isTyping = false; // Set typing to false on exception
       });
     }
+  }
+
+  void initialMessage() async {
+    const message =
+        "You are a travel assistant for the GoEgypt tourism app. Only answer questions that are related to tourism in Egypt, such as famous places, hotels, tour packages, transportation, local culture, and food. If a question is not related to tourism or hospitality, respond with: I'm here to help with tourism-related questions only. Please ask something related to your trip to Egypt";
+
+    // Simulate typing delay
+
+    try {
+      final response = await Gemini.instance.prompt(parts: [
+        Part.text(message),
+      ]);
+    
+    } on Exception catch (e) {
+      setState(() {
+        _messages
+            .add({'sender': 'bot', 'text': 'Error: Could not fetch answer.'});
+        isTyping = false; // Set typing to false on exception
+      });
+    }
 
     _scrollToBottom();
   }
@@ -71,6 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    initialMessage();
     _messages.add(
         {'sender': 'bot', 'text': "Hi,Welcome to Chatbot,How Can i help You?"});
   }

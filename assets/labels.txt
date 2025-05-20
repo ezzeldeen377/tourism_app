@@ -1,0 +1,22 @@
+0 Akhenaten
+1 Amenhotep III and Tiye
+2 Bent Pyramid
+3 Bust of Ramesses II
+4 Colossal Statue of Ramesses II
+5 Colossi of Memnon
+6 Goddess Isis with her child
+7 Hatshepsut
+8 Head Statue of Amenhotep III
+9 Pyramid of Khafre
+10 King Thutmose III
+11 Mask of Tutankhamun
+12 Pyramid of Menkaure
+13 Nefertiti
+14 Pyramid of Djoser
+15 Ramessum
+16 Sphinx
+17 King Zoser
+18 Statue of Tutankhamun with Ankhesenamun
+19 Temple of Isis in Philae
+20 Temple of Kom Ombo
+21 The Great Temple of Ramesses II
