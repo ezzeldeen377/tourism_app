@@ -33,6 +33,7 @@ class _packageviewState extends State<packageview> {
       (value) {
         for (var element in value.docs) {
           if (element['package_id'].toString() == widget.id) {
+            print("element : ${element['places_name']}");
             finaldata.add(element);
           }
         }
@@ -139,7 +140,7 @@ class _packageviewState extends State<packageview> {
                                                 ['places_price'],
                                             lat: finaldata[i]['latitude'],
                                             lng: finaldata[i]['longtitude'],
-                                            fullImage: data[i]["visual_360"]);
+                                            fullImage: (finaldata[i]["visual_360"])??null);
                                       }
                                     }));
                                   },

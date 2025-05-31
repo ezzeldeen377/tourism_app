@@ -14,7 +14,6 @@ import 'package:new_flutter/features/maps/testmap.dart';
 import 'package:new_flutter/start_app/start_page.dart';
 import 'package:new_flutter/features/Profile/profile_page.dart';
 import 'package:new_flutter/features/Componants/example_screen_2.dart';
- 
 
 class viewplaces extends StatefulWidget {
   const viewplaces({
@@ -26,9 +25,10 @@ class viewplaces extends StatefulWidget {
     required this.lat,
     required this.lng,
     this.fullImage,
-    this.vrtour, this.data,
+    this.vrtour,
+    this.data,
   });
-  final Map<String ,dynamic>? data;
+  final Map<String, dynamic>? data;
   final String placesName;
   final List<dynamic> images;
   final double lat;
@@ -115,10 +115,11 @@ class _viewplacesState extends State<viewplaces> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  
+
                   // Price tag with better styling
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: kMainColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -127,7 +128,8 @@ class _viewplacesState extends State<viewplaces> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.monetization_on, color: kMainColor, size: 18),
+                        const Icon(Icons.monetization_on,
+                            color: kMainColor, size: 18),
                         const SizedBox(width: 6),
                         Text(
                           "${widget.placesPrice} EGP",
@@ -140,11 +142,11 @@ class _viewplacesState extends State<viewplaces> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
                   const Divider(),
                   const SizedBox(height: 8),
-                  
+
                   // Description section with heading
                   const Text(
                     "Description",
@@ -167,9 +169,9 @@ class _viewplacesState extends State<viewplaces> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Actions section
           Card(
             elevation: 2,
@@ -190,7 +192,7 @@ class _viewplacesState extends State<viewplaces> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // Location button with icon
                   ActionButton(
                     width: double.infinity,
@@ -211,8 +213,9 @@ class _viewplacesState extends State<viewplaces> {
                     isBold: true,
                     isGradient: true,
                   ),
-                  
-                  if (widget.fullImage != null) ...[
+
+                  if (widget.fullImage != null 
+                ) ...[
                     const SizedBox(height: 16),
                     // 360 View button with icon
                     ActionButton(
@@ -233,9 +236,9 @@ class _viewplacesState extends State<viewplaces> {
                       isBold: true,
                       isGradient: true,
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     // VR Tour button (if available)
                     if (widget.vrtour != null && widget.vrtour!.isNotEmpty)
                       ActionButton(
@@ -261,9 +264,9 @@ class _viewplacesState extends State<viewplaces> {
               ),
             ),
           ),
-          
+
           // Book Now button (if data available)
-          if(widget.data != null) ...[
+          if (widget.data != null) ...[
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.only(bottom: 30),

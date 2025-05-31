@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'tourism-acaf8.firebasestorage.app',
     iosBundleId: 'com.example.newFlutter',
   );
+
 }
